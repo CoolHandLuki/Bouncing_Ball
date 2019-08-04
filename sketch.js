@@ -1,16 +1,22 @@
+var balls = [];
+
 function setup() {
   // put setup code here
-  createCanvas(800,800);
-  b = new Ball(createVector(40,40), createVector(5,1.5), 40);
-  
+	createCanvas(800,800);
+	for (i = 0; i < 15; i++) {
+		let size = 40;	
+		let position = createVector(size + (50 * i), size + 5);
+		let velocity = createVector(3, 6);
+		balls.push(new Ball(position, velocity, size));
+	}
 }
 
 function draw() {
   // put drawing code here
-  background(51);
-  b.move();
-  b.show();
+ 	background(51);
   
-//  for (let i = 0; i < 150; i++) {
-//    rect(i * 10, i * 10, 40, 40); }
+	for (i = 0; i < balls.length; i++) {
+		balls[i].move();
+		balls[i].show();
+	}
 }
