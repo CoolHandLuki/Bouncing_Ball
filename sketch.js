@@ -1,9 +1,13 @@
 let balls = [];
+let gravity;
 // let myBall = new Ball(createVector(width/2, height/2), createVector(0,0), 80); 
 
 function setup() {
   // put setup code here
 	createCanvas(800,800);
+	
+	gravity = createVector(0,0.5);
+	
 	for (let i = 0; i < 8; i++) {
 		let size = random(40, 120);	
 		let position = createVector(size + random(0,width - size), size + random(0, height - size));
@@ -24,6 +28,7 @@ function draw() {
 				balls[j].velocity.mult(-1);
 			}
 		}
+		balls[i].applyForce(gravity);
 		balls[i].move();
 		balls[i].show();
 	}

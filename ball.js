@@ -1,13 +1,14 @@
 class Ball {
-	constructor(position, velocity, size) {
+	constructor(position, velocity, size,) {
 		this.position = position;
 		this.velocity = velocity;
+		this.acceleration = createVector(0,0);
 		this.size = size;
+		this.mass = size; // setting mass equal to size for now
 	}
-	move() {
-		checkEdges();
-		// move the ball to it's new position by adding velocity to position	
-		this.position.add(this.velocity);
+
+	applyForce(force) {
+		this.acceleration.add(force);	
 	}
 
 	checkEdges() {
@@ -20,6 +21,15 @@ class Ball {
 		} 
 	}
 	
+	move() {
+		// move the ball to it's new position by adding velocity to position	
+		this.checkEdges();
+		this.velocity.add(this.acceleration);	
+		this.position.add(this.velocity);
+		this.acceleration = createVector(0,0);
+	}
+
+
 	show() {
   		ellipse(this.position.x, this.position.y, this.size);
 	}
