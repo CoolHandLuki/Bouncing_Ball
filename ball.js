@@ -5,11 +5,14 @@ class Ball {
 		this.acceleration = createVector(0,0);
 		this.size = floor(_size);
 		this.mass = _size; // setting mass equal to size for now
-		this.color = [255,255,255]; 
+		this.color = [255,255,255];
 	}
 
-	applyForce(force) {
-		this.acceleration.add(force);	
+	applyForce(_force) {
+		// get a copy of the vector
+		let f = _force.copy();
+		f.div(this.mass);
+		this.acceleration.add(f);	
 	}
 
 	checkEdges(_friction) {
@@ -17,7 +20,7 @@ class Ball {
 		if (this.position.x < 0 + (this.size / 2))	{
 			this.position.x = 0 + (this.size / 2);
 			this.velocity.x *= -_friction; 
-		} else if (this.position.x > width - this.size/2) {
+		} else if (this.position.x > width - this.size / 2) {
 			this.position.x = width - (this.size / 2);
 			this.velocity.x *= -_friction;
 		}
@@ -27,8 +30,9 @@ class Ball {
 		} else if (this.position.y > height - this.size / 2) {
 			this.position.y = height - (this.size / 2);
 			this.velocity.y *= -_friction;
-			// let invertAcceleration = createVector(0, this.acceleration.y *= -1);
-			// this.applyForce(invertAccelertion);
+			//let exitAcceleration = this.acceleration.copy(); 
+			//exitAcceleration.x = 0;
+			//this.applyForce(exitAcceleration.mult(-2));
 		}
 	}
 	
@@ -36,17 +40,21 @@ class Ball {
 		// move the ball to it's new position by adding velocity to position	
 		this.velocity.add(this.acceleration);	
 		this.position.add(this.velocity);
-		this.floorVector(this.position); 
-		this.acceleration *= 0;
+		// this.floorVector(this.position); 
+		// use mult method instead of *= 0 or else acceleration becomes NaN
+		this.acceleration.mult(0); 
 		this.checkEdges(_friction);
 	}
 
 	show() {
-			noStroke();
-			fill(this.color);
-  		ellipse(this.position.x, this.position.y, this.size);
-			stroke(255,0,0);
-			line(this.position.x, this.position.y, this.position.x, this.position.y + this.size / 2);
+		noStroke();
+		fill(this.color);
+  	ellipse(this.position.x, this.position.y, this.size);
+		stroke(255,0,0);
+		let velDirection = this.velocity.copy();
+		velDirection.setMag(this.size / 2);
+		velDirection.add(this.position);
+		line(this.position.x, this.position.y, velDirection.x, velDirection.y);
 	}
 
 	isColliding(other) {
